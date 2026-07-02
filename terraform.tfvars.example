@@ -1,0 +1,23 @@
+# ── Required ──────────────────────────────────────────────────────────────────
+namespace   = "sf"
+environment = "prod"
+
+# Spoke VPC — the first VPC to connect through the hub firewall
+spoke_vpc_id          = "vpc-0abc123def456789"
+spoke_subnet_ids      = ["subnet-0aaa111", "subnet-0bbb222"]
+spoke_route_table_ids = ["rtb-0ccc333", "rtb-0ddd444"]
+spoke_account_ids     = ["123456789012"]
+
+# ── Optional ──────────────────────────────────────────────────────────────────
+region        = "us-east-1"
+hub_vpc_cidr  = "100.64.0.0/16"
+spoke_cidr    = "10.0.0.0/8"
+tgw_name      = "hub-transit-gateway"
+
+kms_deletion_window = 30
+log_retention_days  = 90
+
+blocked_domains = [
+  "malware.example.com",
+  "badactor.example.net",
+]

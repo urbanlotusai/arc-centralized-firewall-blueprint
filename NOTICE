@@ -1,0 +1,16 @@
+ARC Centralized Network Firewall Blueprint
+Copyright 2026 SourceFuse
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License in the accompanying LICENSE file
+or at http://www.apache.org/licenses/LICENSE-2.0
+
+This product composes the following SourceFuse ARC Terraform modules,
+each published under their respective licenses on the Terraform Registry:
+  - sourcefuse/arc-kms/aws
+  - sourcefuse/arc-network/aws
+  - sourcefuse/arc-network-firewall/aws
+  - sourcefuse/arc-transit-gateway/aws
+  - sourcefuse/arc-s3/aws
+  - sourcefuse/arc-route53/aws
