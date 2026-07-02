@@ -1,16 +1,14 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # 1. KMS — encryption for firewall logs and S3 bucket
-#    Outputs consumed by: module.s3, module.network_firewall
+#    Outputs consumed by: module.s3_logs, module.network_firewall
 # ═══════════════════════════════════════════════════════════════════════════════
 module "kms" {
-  source  = "sourcefuse/arc-kms/aws"
-  version = "1.0.11"
+  source = "./modules/01-kms"
 
   alias                   = local.kms_alias
   policy                  = data.aws_iam_policy_document.kms.json
   description             = "CMK for ${local.name_prefix} Centralized Network Firewall"
   deletion_window_in_days = var.kms_deletion_window
-  enable_key_rotation     = true
 
   tags = local.tags
 }
@@ -20,16 +18,12 @@ module "kms" {
 #    Outputs consumed by: module.network_firewall (logging_config)
 # ═══════════════════════════════════════════════════════════════════════════════
 module "s3_logs" {
-  source  = "sourcefuse/arc-s3/aws"
-  version = "0.0.7"
+  source = "./modules/02-s3"
 
   name      = local.s3_log_bucket_name
   namespace = var.namespace
 
-  sse_algorithm         = "aws:kms"
-  kms_master_key_id     = module.kms.key_arn
-  versioning_enabled    = true
-  force_destroy         = false
+  kms_master_key_id = module.kms.key_arn
 
   lifecycle_configuration_rules = [
     {
@@ -51,8 +45,7 @@ module "s3_logs" {
 #    Outputs consumed by: module.network_firewall, module.transit_gateway
 # ═══════════════════════════════════════════════════════════════════════════════
 module "network" {
-  source  = "sourcefuse/arc-network/aws"
-  version = "3.0.14"
+  source = "./modules/03-network"
 
   name        = local.hub_vpc_name
   namespace   = var.namespace
@@ -67,8 +60,7 @@ module "network" {
 #    All spoke traffic is routed through this inspection point.
 # ═══════════════════════════════════════════════════════════════════════════════
 module "network_firewall" {
-  source  = "sourcefuse/arc-network-firewall/aws"
-  version = "0.0.3"
+  source = "./modules/04-network-firewall"
 
   name       = local.firewall_name
   vpc_id     = module.network.vpc_id
@@ -78,7 +70,7 @@ module "network_firewall" {
     create = true
     name   = "${local.firewall_name}-policy"
 
-    stateless_default_actions         = ["aws:forward_to_sfe"]
+    stateless_default_actions          = ["aws:forward_to_sfe"]
     stateless_fragment_default_actions = ["aws:forward_to_sfe"]
 
     stateful_rule_group_references = [
@@ -137,11 +129,9 @@ resource "aws_networkfirewall_rule_group" "blocked_domains" {
 #    arc-transit-gateway requires the *hub* VPC details as target_vpc_id.
 # ═══════════════════════════════════════════════════════════════════════════════
 module "transit_gateway" {
-  source  = "sourcefuse/arc-transit-gateway/aws"
-  version = "0.0.1"
+  source = "./modules/05-transit-gateway"
 
-  transit_gateway_name  = local.tgw_name
-  create_transit_gateway = true
+  transit_gateway_name = local.tgw_name
 
   # Hub VPC attachment
   target_vpc_id          = module.network.vpc_id
@@ -150,9 +140,9 @@ module "transit_gateway" {
   target_account_id      = [data.aws_caller_identity.current.account_id]
 
   # Spoke VPC attachment (first spoke; add more via separate module blocks)
-  source_vpc_id       = var.spoke_vpc_id
-  source_subnet_ids   = var.spoke_subnet_ids
-  source_cidr_block   = var.spoke_cidr
+  source_vpc_id     = var.spoke_vpc_id
+  source_subnet_ids = var.spoke_subnet_ids
+  source_cidr_block = var.spoke_cidr
 
   tags = local.tags
 
@@ -164,8 +154,7 @@ module "transit_gateway" {
 #    Enables spoke VPCs to resolve private hosted zones through the hub.
 # ═══════════════════════════════════════════════════════════════════════════════
 module "route53" {
-  source  = "sourcefuse/arc-route53/aws"
-  version = "0.0.1"
+  source = "./modules/06-route53"
 
   vpc_id = module.network.vpc_id
 

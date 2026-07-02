@@ -183,7 +183,16 @@ arc-centralized-firewall-blueprint/
 ├── data.tf                   # caller identity, KMS policy, subnet lookups
 ├── outputs.tf                # firewall ARN, TGW ID, S3 bucket, KMS ARN
 ├── version.tf                # Terraform + AWS provider pins
+├── .terraform-version        # tfenv pin (1.9.8)
 ├── terraform.tfvars.example  # copy to terraform.tfvars
+├── modules/                  # one numbered wrapper per ARC module
+│   ├── 01-kms/
+│   ├── 02-s3/
+│   ├── 03-network/
+│   ├── 04-network-firewall/
+│   ├── 05-transit-gateway/
+│   └── 06-route53/
+├── sample-app/                # verify.sh proving inspection traffic flows through the firewall
 ├── examples/
 │   ├── README.md
 │   ├── general.tfvars
