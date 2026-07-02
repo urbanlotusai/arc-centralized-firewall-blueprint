@@ -37,13 +37,13 @@ No hand-wiring of Transit Gateway route tables, firewall policy attachments, or 
 
 | Advantage | What it means for you |
 |---|---|
-| ⚡ **Minutes, not days** | A production hub-and-spoke with Network Firewall normally takes days of networking Terraform — this deploys in one command. |
-| 🔒 **Secure by default** | All firewall alert and flow logs are KMS-encrypted at rest. Spoke VPCs cannot communicate directly — all traffic flows through the inspection point. |
-| 🧱 **Defense in depth** | Stateless rules for quick allow/deny + stateful Suricata rules for domain blocking, IPS signatures, and TLS SNI inspection. |
-| 📋 **Domain blocklist as code** | Pass a list of blocked domains in `terraform.tfvars` — Suricata IPS rules are auto-generated. No manual rule editing. |
-| 📊 **Full traffic visibility** | Alert logs (blocked/suspicious) and flow logs (all traffic) go to S3. Query with Athena or feed your SIEM. |
-| 📦 **Portable & auditable** | Pure Terraform. Version-controlled, reproducible across environments and accounts. |
-| 🛠️ **Beginner-friendly** | One `Makefile`, copy-paste example tfvars, and step-by-step docs for macOS, Linux, and Windows. |
+| **Minutes, not days** | A production hub-and-spoke with Network Firewall normally takes days of networking Terraform — this deploys in one command. |
+| **Secure by default** | All firewall alert and flow logs are KMS-encrypted at rest. Spoke VPCs cannot communicate directly — all traffic flows through the inspection point. |
+| **Defense in depth** | Stateless rules for quick allow/deny + stateful Suricata rules for domain blocking, IPS signatures, and TLS SNI inspection. |
+| **Domain blocklist as code** | Pass a list of blocked domains in `terraform.tfvars` — Suricata IPS rules are auto-generated. No manual rule editing. |
+| **Full traffic visibility** | Alert logs (blocked/suspicious) and flow logs (all traffic) go to S3. Query with Athena or feed your SIEM. |
+| **Portable & auditable** | Pure Terraform. Version-controlled, reproducible across environments and accounts. |
+| **Beginner-friendly** | One `Makefile`, copy-paste example tfvars, and step-by-step docs for macOS, Linux, and Windows. |
 
 ---
 
@@ -123,7 +123,7 @@ Edit the mandatory values in `terraform.tfvars`:
 | Preview | `make plan` | `terraform plan` |
 | Deploy | `make apply` | `terraform init && terraform apply` |
 
-> ⏱️ Allow 20–30 minutes for Transit Gateway propagation and Network Firewall provisioning.
+> ⏱ Allow 20–30 minutes for Transit Gateway propagation and Network Firewall provisioning.
 
 ### 4. Update spoke route tables
 
