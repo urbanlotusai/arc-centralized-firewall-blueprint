@@ -1,23 +1,37 @@
-variable "name" {
-  type = string
+variable "namespace" {
+  description = "Organization or team namespace"
+  type        = string
+  default     = "arc"
 }
 
-variable "vpc_id" {
-  type = string
+variable "environment" {
+  description = "Environment name"
+  type        = string
+  default     = "dev"
 }
 
-variable "subnet_ids" {
-  type = list(string)
-}
-
-variable "firewall_policy_config" {
-  type = any
-}
-
-variable "logging_config" {
-  type = any
+variable "region" {
+  description = "AWS region"
+  type        = string
+  default     = "us-east-1"
 }
 
 variable "tags" {
-  type = map(string)
+  description = "Tags to apply to resources"
+  type        = map(string)
+  default = {
+    ManagedBy = "Terraform"
+    Project   = "arc-centralized-firewall-blueprint"
+  }
+}
+
+variable "state_bucket_name" {
+  description = "S3 bucket name for Terraform state (used to read 03-network and 02-s3 remote state)"
+  type        = string
+}
+
+variable "blocked_domains" {
+  description = "List of domains to block in the Network Firewall stateful rule group (e.g. malware C2 domains)."
+  type        = list(string)
+  default     = ["malware.example.com", "badactor.example.net"]
 }

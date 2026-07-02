@@ -1,11 +1,14 @@
 output "arn" {
-  value = module.network_firewall.arn
+  description = "ARN of the AWS Network Firewall."
+  value       = module.network_firewall.arn
 }
 
 output "id" {
-  value = module.network_firewall.id
+  description = "ID of the AWS Network Firewall."
+  value       = module.network_firewall.id
 }
 
 output "policy_arn" {
-  value = module.network_firewall.policy_arn
+  description = "ARN of the Network Firewall policy."
+  value       = module.network_firewall.policy_arn
 }

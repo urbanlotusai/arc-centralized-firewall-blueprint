@@ -1,3 +1,4 @@
 output "vpc_id" {
-  value = module.network.vpc_id
+  description = "ID of the hub (inspection) VPC."
+  value       = module.network.vpc_id
 }
