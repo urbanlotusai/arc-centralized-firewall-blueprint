@@ -75,3 +75,14 @@ variable "tgw_name" {
   type        = string
   default     = "hub-transit-gateway"
 }
+
+variable "compliance_profile" {
+  description = "Compliance overlay: 'general' (default), 'hipaa', or 'pci_dss'. Drives log retention and deletion protection."
+  type        = string
+  default     = "general"
+
+  validation {
+    condition     = contains(["general", "hipaa", "pci_dss"], var.compliance_profile)
+    error_message = "compliance_profile must be general, hipaa, or pci_dss."
+  }
+}

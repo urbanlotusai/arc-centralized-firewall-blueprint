@@ -36,7 +36,7 @@ module "s3_logs" {
       id      = "ExpireOldLogs"
       enabled = true
       expiration = {
-        days = var.log_retention_days
+        days = local.log_retention_days
       }
     }
   ]

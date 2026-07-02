@@ -2,14 +2,18 @@ locals {
   name_prefix = "${var.namespace}-${var.environment}"
 
   tags = {
-    Namespace   = var.namespace
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-    Blueprint   = "centralized-firewall"
+    Namespace         = var.namespace
+    Environment       = var.environment
+    ManagedBy         = "Terraform"
+    Blueprint         = "centralized-firewall"
+    ComplianceProfile = var.compliance_profile
   }
 
-  # Compliance overlay — drives tighter settings when any strict profile is active
-  is_strict = false # set to true for compliance hardening (no profile var for this blueprint)
+  # Compliance overlay
+  is_hipaa           = var.compliance_profile == "hipaa"
+  is_pci_dss         = var.compliance_profile == "pci_dss"
+  is_strict          = local.is_hipaa || local.is_pci_dss
+  log_retention_days = local.is_strict ? 365 : var.log_retention_days
 
   # Resource names (consistent suffix pattern)
   kms_alias             = "alias/${local.name_prefix}-firewall"

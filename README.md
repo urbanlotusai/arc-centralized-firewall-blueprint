@@ -163,20 +163,32 @@ terraform output kms_key_arn             # CMK ARN
 
 ---
 
+## Compliance profiles
+
+| Profile | Effect |
+|---|---|
+| `general` | KMS rotation on, 90-day S3 log retention |
+| `hipaa` | 365-day S3 firewall log retention |
+| `pci_dss` | 365-day S3 firewall log retention |
+
+---
+
 ## Project structure
 
 ```
 arc-centralized-firewall-blueprint/
 ├── main.tf                   # 6 ARC module blocks + Suricata rule group resource
 ├── variables.tf              # all inputs with types & descriptions
-├── locals.tf                 # naming, tags, Suricata rule string generation
+├── locals.tf                 # naming, tags, compliance overlay, Suricata rule string generation
 ├── data.tf                   # caller identity, KMS policy, subnet lookups
 ├── outputs.tf                # firewall ARN, TGW ID, S3 bucket, KMS ARN
 ├── version.tf                # Terraform + AWS provider pins
 ├── terraform.tfvars.example  # copy to terraform.tfvars
 ├── examples/
 │   ├── README.md
-│   └── general.tfvars
+│   ├── general.tfvars
+│   ├── hipaa.tfvars
+│   └── pci_dss.tfvars
 ├── docs/
 │   ├── INSTALL.md            # macOS · Linux · Windows setup guide
 │   └── DEPLOYMENT.md        # full deployment + spoke attachment + rule updates
